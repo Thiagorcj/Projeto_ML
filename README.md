@@ -9,9 +9,18 @@ Inicialmente, é realizado o tratamento dos arquivos encontrados na pasta data, 
 
 No arquivo [funcs.py](funcs.py)
  está presente os códigos de Regressão linear, PLA, Pocket e Regressão logistica. Abaixo estão os plots obtidos comparando 1 a 1 (no caso do PLA, nem sempre será possível ser utilizado, pois os dados não são linearmente separáveis). E importante destacar que foram feitas adapções como transformar as labels em 1 e -1 para conseguir calcular. Essas informações estão presentes no arquivo [codes.ipynb](codes.ipynb).
+O primeiro passo foi calcular e plotar gráficos de regressão linear, como é possível nos plots abaixo:
 
  ![rl_01](imagens/rl_0_1.png)
  ![rl_01](imagens/rl_0_4.png)
  ![rl_01](imagens/rl_0_5.png)
  ![rl_01](imagens/rl_1_4.png)
  ![rl_01](imagens/rl_1_5.png)
+ ![rl_01](imagens/rl_4_5.png)
+
+ Feito isso, foi iniciado a análise 1 a 1 utilizando Perceptron. É importante destacar não é possível usar o Perceptron para todos os casos, pois nem sempre os dados eram linear separáveis. Uma adaptação feita com objetivo de melhorar o desempenho, foi iniciar o vetor W com os valores obtidos na regressão linear, isso  fez com que nem fossem feitas novas iterações em alguns casos(já que a reta já seperava os dados) e o processo todo fosse muito mais rápido. Obs: o primeiro exemplo não utilizou o W da regressão linear, justamente para ser visto a diferença; no número de iterações, ao utilizar o W obtido na regressão linear,  foi percebido que um número de iterações  milhares de vezes maior sem o W, e enxergar o comportamento da reta.
+
+![rl_01](imagens/perc_0_1.png)
+![rl_01](imagens/perc_0_4.png)
+![rl_01](imagens/perc_1_4.png)
+![rl_01](imagens/perc_1_5.png)
