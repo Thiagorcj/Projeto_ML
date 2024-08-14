@@ -123,7 +123,13 @@ class Perceptron:
 
       return it, self.w
 
-  
+  def predict(self,X):
+    results = []
+    for i in range(len(X)):
+        results.append(np.sign(self.w[2]*X[i][1] + self.w[1]*X[i][0] + self.w[0]))
+        
+    return results
+
   def plot(self, X, y,label1,label2, savepath=None, title='Perceptron - Separação de Classes',scale=1.0):
       """
       Plota os pontos e a linha separadora.
