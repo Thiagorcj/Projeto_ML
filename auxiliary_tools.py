@@ -130,11 +130,11 @@ def filter_and_transform_df(df, label1, label2):
 
 def acuracia(y1,y2):
     sum = 0
-    for i in range(len(y1)):
+    for i in range(len(y2)):
         if y1[i]==y2[i]:
             sum+=1
 
-    return sum/len(y1)*100
+    return sum/len(y2)*100
 
 def plot_confusion_matrix(y_true, y_pred,cor, labels,true_labels, save_path=None):
     """

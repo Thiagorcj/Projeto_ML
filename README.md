@@ -37,3 +37,13 @@ O primeiro passo foi calcular e plotar gráficos de regressão linear, como é p
 ![rl_01](imagens/mc_perc_1_5.png)
 ![rl_01](imagens/mc_perc_1_4.png)
 Para dados que são visualmente linearmente inseparáveis, foi usado o Pocket, que possui uma ideia similar ao Perceptron com a mudança que possui um número de iterações definido previamente.
+
+### Visualização da Regressão Logística
+
+[Labels 0,1](3D_plots/logistic_regression_3d_plot_0_1.html) |
+[Labels 0,4](3D_plots/logistic_regression_3d_plot_0_4.html) |
+[Labels 0,5](3D_plots/logistic_regression_3d_plot_0_5.html) |
+[Labels 1,5](3D_plots/logistic_regression_3d_plot_1_5.html) 
+[Labels 1,4](3D_plots/logistic_regression_3d_plot_1_4.html) |
+[Labels 4,5](3D_plots/logistic_regression_3d_plot_4_5.html) |
+

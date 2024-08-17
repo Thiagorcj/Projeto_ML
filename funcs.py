@@ -192,3 +192,38 @@ it,w = p.fit(X,y)
 print("Quantidade de iterações: ", it)
 print("Pesos: ", w)
 """
+
+class LogisticRegression:
+    def __init__(self, learning_rate=0.01, num_iterations=1000):
+        self.learning_rate = learning_rate
+        self.num_iterations = num_iterations
+        self.weights = None
+        self.bias = None
+
+    def logistic(self, s):
+        return np.exp(s) / (1 + np.exp(s))
+
+    def compute_gradient(self, X, y, y_pred):
+        num_samples = X.shape[0]
+        dw = (1 / num_samples) * np.dot(X.T, (y_pred - y))
+        db = (1 / num_samples) * np.sum(y_pred - y)
+        return dw, db
+
+    def fit(self, X, y):
+        num_samples, num_features = X.shape
+        self.weights = np.zeros(num_features)
+        self.bias = 0
+
+        for _ in range(self.num_iterations):
+            linear_model = np.dot(X, self.weights) + self.bias
+            y_pred = self.logistic(linear_model)
+            dw, db = self.compute_gradient(X, y, y_pred)
+            self.weights -= self.learning_rate * dw
+            self.bias -= self.learning_rate * db
+
+        return self.weights
+
+    def predict(self, X):
+        linear_model = np.dot(X, self.weights) + self.bias
+        y_pred = self.logistic(linear_model)
+        return y_pred
