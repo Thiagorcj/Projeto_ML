@@ -40,10 +40,10 @@ Para dados que são visualmente linearmente inseparáveis, foi usado o Pocket, q
 
 ### Visualização da Regressão Logística
 
-[Labels 0,1](3D_plots/logistic_regression_3d_plot_0_1.html) |
-[Labels 0,4](3D_plots/logistic_regression_3d_plot_0_4.html) |
-[Labels 0,5](3D_plots/logistic_regression_3d_plot_0_5.html) |
-[Labels 1,5](3D_plots/logistic_regression_3d_plot_1_5.html) 
-[Labels 1,4](3D_plots/logistic_regression_3d_plot_1_4.html) |
-[Labels 4,5](3D_plots/logistic_regression_3d_plot_4_5.html) |
+[Labels 0,1](https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_0_1.html) |
+[Labels 0,4](https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_0_4.html) |
+[Labels 0,5](https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_0_5.html) |
+[Labels 1,5](https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_1_5.html) 
+[Labels 1,4](https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_1_4.html) |
+[Labels 4,5](3https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_4_5.html) |
 
