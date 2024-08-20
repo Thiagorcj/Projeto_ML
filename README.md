@@ -50,7 +50,17 @@ O algoritmo do Perceptron entra em loop caso os dados não sejam linearmente sep
 ![rl_01](imagens/mc_perc_0_4.png)
 ![rl_01](imagens/mc_perc_1_5.png)
 ![rl_01](imagens/mc_perc_1_4.png)
-Para dados que são visualmente linearmente inseparáveis, foi usado o Pocket, que possui uma ideia similar ao Perceptron com a mudança que possui um número de iterações definido previamente.
+
+#### Plots - Pocket 1 x 1
+![rl_01](imagens/pocket_plot_0_5.png)
+![rl_01](imagens/pocket_plot_4_5.png)
+
+#### Acurácia do Pocket:
+![rl_01](imagens/accuracy_table3.png)
+#### Matrizes confusão Pocket:
+![r](imagens/mc_pocket_0_5.png)
+![r](imagens/mc_pocket_4_5.png)
+
 ### Regressão logística
 
   A fórmula abaixo é da função logística. Basicamente, ela é a nossa função-alvo, a qual que queremos nos aproximar. O 's' é o produto interno do vetor 'x' (as features) com o vetor de pesos 'w', que será ajustado a cada iteração no algoritmo de aprendizado. A ideia é que, a cada iteração, mudamos o 'w' e ele vai se aproximando cada vez mais dessa função. Até aí, tudo tranquilo, né?
@@ -71,7 +81,7 @@ Feito isso, temos um classificador. Se f(x) for maior que 0,5, é mais provável
 [Labels 4,5](https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_4_5.html) |
 
 #### Acurácia da Regressão logística:
-![rl_01](imagens/accuracy_table3.png) 
+![rl_01](imagens/accuracy_table4.png) 
 
 #### Matrizes confusão Regressão logística:
 ![r](imagens/rlo_plot_1_5.png)
