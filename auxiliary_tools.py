@@ -254,3 +254,72 @@ def plot_all_decision_boundaries(df, weights_list=None, title='', save_path=None
     if save_path:
         plt.savefig(save_path)
     plt.show()
+
+
+def plot_logistic_regression(X, y, label1, label2, model, filename=None):
+    """
+    Plota a fronteira de decisão de um modelo de regressão logística.
+
+    Parâmetros:
+    - X: np.ndarray, matriz de características.
+    - y: np.ndarray, vetor de rótulos.
+    - label1: int, rótulo da primeira classe.
+    - label2: int, rótulo da segunda classe.
+    - model: LogisticRegression, modelo treinado de regressão logística.
+    - filename: str ou None, caminho para salvar o gráfico (opcional).
+    """
+    plt.figure(figsize=(8, 6))
+
+    # Plotar os pontos de dados
+    plt.scatter(X[y == 1][:, 0], X[y == 1][:, 1], color='blue', label=f'Label = {label1}', edgecolor='k')
+    plt.scatter(X[y == -1][:, 0], X[y == -1][:, 1], color='red', label=f'Label = {label2}', edgecolor='k')
+
+    # Criar uma grade de pontos para a decisão boundary
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                         np.arange(y_min, y_max, 0.01))
+
+    # Previsões para cada ponto na grade
+    Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = (Z >= 0.5).astype(int)  # Convertendo para 0 ou 1
+    Z = Z.reshape(xx.shape)
+
+    # Contour plot da decisão boundary
+    plt.contourf(xx, yy, Z, alpha=0.3, cmap='bwr', levels=[-0.5, 0.5])
+    plt.contour(xx, yy, Z, levels=[0], colors='k', linewidths=1.5)
+
+    plt.title('Regressão Logística - Fronteira de Decisão')
+    plt.xlabel('Intensidade')
+    plt.ylabel('Simetria')
+    plt.legend()
+
+    if filename:
+        plt.savefig(filename)
+        plt.close()
+    else:
+        plt.show()
+        
+def filter_and_transform_df2(df, label1, label_list):
+    """
+    Filtra um DataFrame para incluir apenas linhas com os labels fornecidos e
+    substitui esses labels por 1 para o label principal e -1 para os outros labels.
+
+    Parâmetros:
+    df (pd.DataFrame): O DataFrame original com as colunas 'label', 'intensidade', 'simetria'.
+    label1 (int): O label principal para manter e substituir por 1.
+    label_list (list): A lista de labels para substituir por -1.
+
+    Retorna:
+    pd.DataFrame: Um novo DataFrame filtrado e com os labels transformados.
+    """
+    # Filtrar o DataFrame para incluir apenas os labels fornecidos
+    labels_to_keep = [label1] + label_list
+    filtered_df = df[df['label'].isin(labels_to_keep)].copy()
+
+    # Substituir os labels
+    label_mapping = {label1: 1}
+    label_mapping.update({label: -1 for label in label_list})
+    filtered_df['label_to_calculate'] = filtered_df['label'].replace(label_mapping)
+
+    return filtered_df

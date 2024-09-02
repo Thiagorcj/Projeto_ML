@@ -130,6 +130,10 @@ Matriz confusão:
 
 ### Classificador com multiplas classes com ideia de "1 para todos" - Regressão logística:
 
+Retas para Pocket, passo a passo:
+
+![r](imagens/all_decision_boundaries2.png)
+
 Gif com os processos detalhados para classificação:
 
 ![r](temp_images3/decision_boundaries3.gif)
