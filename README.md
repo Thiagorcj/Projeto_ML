@@ -70,7 +70,9 @@ O algoritmo do Perceptron entra em loop caso os dados não sejam linearmente sep
 Aí você pode se perguntar: "Mas por que fazer isso?" Então, se você reparar, os valores que essa função gera ficam entre 0 e 1, o que nos dá uma ideia de probabilidade de pertencimento a uma determinada classe (chamamos essa probabilidade de 'p'). Além disso, temos também a estimativa da probabilidade de pertencer à outra classe, dada por '1-p'. Assim, se tivermos novos 'x' fora do treinamento e fizermos o produto interno com o vetor de pesos, conseguimos uma estimativa da probabilidade de pertencer a uma classe específica.
 
 Feito isso, temos um classificador. Se f(x) for maior que 0,5, é mais provável que o ponto pertença à classe 1 (vamos chamar assim). Se a probabilidade for menor, é mais provável que pertença à classe 2 (porque nesse caso, 1-p > 0,5). No gráfico 3D, o vetor 'x' é bidimensional, por isso a função parece um plano. Mas, se você observar bem, ela mantém o formato(muito visível nas labels 4,5), só que em 3D, o que indica que eu consegui me aproximar da função-alvo.
+#### Gráfico:
 
+![r](imagens/logistic_regression_plot.png)
 #### Visualização 3D da Regressão Logística:
 
 [Labels 0,1](https://thiagorcj.github.io/Projeto_ML/logistic_regression_3d_plot_0_1.html) |
@@ -92,7 +94,9 @@ Feito isso, temos um classificador. Se f(x) for maior que 0,5, é mais provável
 ![r](imagens/rlo_plot_4_5.png)
 
 ### Classificador com multiplas classes com ideia de "1 contra todos" - Regressão linear
+Retas para regressão linear, passo a passo:
 
+![r](imagens/all_decision_boundaries1.png)
 
 Gif com os processos detalhados para classificação:
 
@@ -106,3 +110,34 @@ Matriz confusão:
 
 ![r](imagens/matriz_all.png)
 
+### Classificador com multiplas classes com ideia de "1 para todos" - Pocket:
+
+Retas para Pocket, passo a passo:
+
+![r](imagens/all_decision_boundaries.png)
+
+Gif com os processos detalhados para classificação:
+
+![r](temp_images2/decision_boundaries2.gif)
+
+Métricas:
+
+![r](imagens/accuracy_all_table2.png)
+
+Matriz confusão:
+
+![r](imagens/matriz_all2.png)
+
+### Classificador com multiplas classes com ideia de "1 para todos" - Regressão logística:
+
+Gif com os processos detalhados para classificação:
+
+![r](temp_images3/decision_boundaries3.gif)
+
+Métricas:
+
+![r](imagens/accuracy_all_table3.png)
+
+Matriz confusão:
+
+![r](imagens/matriz_all3.png)

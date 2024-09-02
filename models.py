@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from matplotlib.table import Table
 
 class LinearRegression:
 
@@ -192,20 +193,112 @@ it,w = p.fit(X,y)
 print("Quantidade de iterações: ", it)
 print("Pesos: ", w)
 """
+class Pocket:
+    def __init__(self, X, y, initial_w=None, max_iterations=1000, learning_rate=0.1):
+        self.X = np.array(X)  # Armazena X como um atributo da classe
+        self.y = np.array(y)  # Armazena y como um atributo da classe
+
+        if initial_w is None:
+            self.w = np.random.rand(3)  # Inicializa pesos aleatórios se não forem fornecidos
+        else:
+            self.w = np.array(initial_w)
+
+        self.max_iterations = max_iterations
+        self.learning_rate = learning_rate
+        self.best_w = self.w.copy()  # Copia inicial de w para garantir que a referência seja mantida
+
+        # Calcula o erro inicial usando os pesos fornecidos ou iniciais
+        y_pred = np.sign(np.dot(self.X, self.w[1:]) + self.w[0])
+        self.best_error = np.mean(self.y != y_pred)
+
+    def _update_weights(self, x_i, y_i):
+        # Atualiza os pesos com base no ponto escolhido
+        self.w[0] += self.learning_rate * y_i
+        self.w[1] += self.learning_rate * x_i[0] * y_i
+        self.w[2] += self.learning_rate * x_i[1] * y_i
+
+    def _get_misclassified_points(self):
+        # Identifica os pontos mal classificados
+        y_pred = np.sign(np.dot(self.X, self.w[1:]) + self.w[0])
+        misclassified = self.X[self.y != y_pred]
+        return misclassified
+
+    def fit(self):
+        for _ in range(self.max_iterations):
+            listaPCI = self._get_misclassified_points()
+
+            if len(listaPCI) == 0:
+                break  # Interrompe se não houver mais pontos mal classificados
+
+            ponto = random.choice(listaPCI)  # Seleciona um ponto aleatoriamente
+            indice_ponto = np.where((self.X == ponto).all(axis=1))[0][0]
+
+            # Atualiza os pesos com base no ponto escolhido
+            self._update_weights(ponto, self.y[indice_ponto])
+
+            # Calcula o erro com os pesos atuais
+            y_pred = np.sign(np.dot(self.X, self.w[1:]) + self.w[0])
+            current_error = np.mean(self.y != y_pred)
+
+            # Se o erro atual for menor, atualiza os melhores pesos
+            if current_error < self.best_error:
+                self.best_error = current_error
+                self.best_w = self.w.copy()
+
+        return self.best_w
+
+    def predict(self, X):
+        X = np.array(X)  # Converte X para um array numpy, caso não seja
+        return np.sign(np.dot(X, self.best_w[1:]) + self.best_w[0])
+
+    def plot(self, label1, label2, savepath=None, title='Pocket Algorithm - Separação de Classes', scale=1.0):
+        X_pos = self.X[self.y == 1]
+        X_neg = self.X[self.y == -1]
+
+        sns.set_palette('husl')
+        plt.figure(figsize=(8*scale, 6*scale))
+
+        plt.scatter(X_pos[:, 0], X_pos[:, 1], color=sns.color_palette()[0], label=label1, alpha=0.7)
+        plt.scatter(X_neg[:, 0], X_neg[:, 1], color=sns.color_palette()[1], label=label2, alpha=0.7)
+
+        if self.best_w is not None and len(self.best_w) > 1:
+            x_values = np.linspace(min(self.X[:, 0]), max(self.X[:, 0]), 100)
+            y_values = (-self.best_w[0] - self.best_w[1] * x_values) / self.best_w[2]
+            plt.plot(x_values, y_values, color='black', label='Reta')
+
+        plt.xlabel('Intensidade')
+        plt.ylabel('Simetria')
+        plt.title(title)
+        plt.legend()
+        plt.grid(True)
+
+        x_min, x_max = np.min(self.X[:, 0]), np.max(self.X[:, 0])
+        y_min, y_max = np.min(self.X[:, 1]), np.max(self.X[:, 1])
+        plt.xlim(x_min - (x_max - x_min) * 0.1 * scale, x_max + (x_max - x_min) * 0.1 * scale)
+        plt.ylim(y_min - (y_max - y_min) * 0.1 * scale, y_max + (y_max - y_min) * 0.1 * scale)
+
+        if savepath:
+            plt.savefig(savepath)
+        else:
+            plt.show()
+
+    def getW(self):
+        return self.best_w
 
 class LogisticRegression:
-    def __init__(self, learning_rate=0.01, num_iterations=1000):
+    def __init__(self, learning_rate=0.01, num_iterations=1000, weight_decay=0.00001):
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
+        self.weight_decay = weight_decay  # parâmetro de weight decay
         self.weights = None
         self.bias = None
 
-    def logistic(self, s):
-        return np.exp(s) / (1 + np.exp(s))
+    def sigmoid(self, z):
+        return 1 / (1 + np.exp(-z))
 
     def compute_gradient(self, X, y, y_pred):
         num_samples = X.shape[0]
-        dw = (1 / num_samples) * np.dot(X.T, (y_pred - y))
+        dw = (1 / num_samples) * np.dot(X.T, (y_pred - y)) + self.weight_decay * self.weights  # adiciona weight decay
         db = (1 / num_samples) * np.sum(y_pred - y)
         return dw, db
 
@@ -215,9 +308,15 @@ class LogisticRegression:
         self.bias = 0
 
         for _ in range(self.num_iterations):
+            # Linear model
             linear_model = np.dot(X, self.weights) + self.bias
-            y_pred = self.logistic(linear_model)
+            # Predictions
+            y_pred = self.sigmoid(linear_model)
+
+            # Compute gradients
             dw, db = self.compute_gradient(X, y, y_pred)
+
+            # Update weights and bias
             self.weights -= self.learning_rate * dw
             self.bias -= self.learning_rate * db
 
@@ -225,5 +324,11 @@ class LogisticRegression:
 
     def predict(self, X):
         linear_model = np.dot(X, self.weights) + self.bias
-        y_pred = self.logistic(linear_model)
+        y_pred = self.sigmoid(linear_model)
         return y_pred
+
+    def evaluate(self, X, y):
+        y_pred = self.predict(X)
+        accuracy = accuracy_score(y, y_pred)
+        cm = confusion_matrix(y, y_pred)
+        return accuracy, cm

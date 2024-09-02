@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import random
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
+from matplotlib.table import Table
+
 
 def calculate_pixel_sum(row):
     # Como a primeira coluna é a label e as outras 784 colunas são os valores dos pixels
@@ -128,6 +130,31 @@ def filter_and_transform_df(df, label1, label2):
 
     return filtered_df
 
+def filter_and_transform_df2(df, label1, label_list):
+    """
+    Filtra um DataFrame para incluir apenas linhas com os labels fornecidos e
+    substitui esses labels por 1 para o label principal e -1 para os outros labels.
+
+    Parâmetros:
+    df (pd.DataFrame): O DataFrame original com as colunas 'label', 'intensidade', 'simetria'.
+    label1 (int): O label principal para manter e substituir por 1.
+    label_list (list): A lista de labels para substituir por -1.
+
+    Retorna:
+    pd.DataFrame: Um novo DataFrame filtrado e com os labels transformados.
+    """
+    # Filtrar o DataFrame para incluir apenas os labels fornecidos
+    labels_to_keep = [label1] + label_list
+    filtered_df = df[df['label'].isin(labels_to_keep)].copy()
+
+    # Substituir os labels
+    label_mapping = {label1: 1}
+    label_mapping.update({label: -1 for label in label_list})
+    filtered_df['label_to_calculate'] = filtered_df['label'].replace(label_mapping)
+
+    return filtered_df
+
+
 def acuracia(y1,y2):
     sum = 0
     for i in range(len(y2)):
@@ -157,3 +184,73 @@ def plot_confusion_matrix(y_true, y_pred,cor, labels,true_labels, save_path=None
         plt.savefig(save_path)
     else:
         plt.show()
+
+# Função para gerar tabela estilizada
+def plot_accuracy_table(accuracies, labels, save_path=None):
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.set_axis_off()
+    table = Table(ax, bbox=[0, 0, 1, 1])
+
+    # Configuração das colunas e linhas
+    n_rows, n_cols = len(labels), 2
+    width, height = 1.0 / n_cols, 1.0 / n_rows
+
+    # Função para definir a cor com base na acurácia
+    def get_color(accuracy):
+        if accuracy >= 95:
+            return 'lightgreen'
+        elif accuracy >= 75:
+            return 'lightyellow'
+        else:
+            return 'lightcoral'
+
+    # Adicionando as células
+    for i in range(n_rows):
+        table.add_cell(i, 0, width, height, text=f'{labels[i][0]} vs {labels[i][1]}', loc='center', facecolor='lightblue')
+        table.add_cell(i, 1, width, height, text=f'{accuracies[i]:.2f}', loc='center', facecolor=get_color(accuracies[i]))
+
+    # Adicionando cabeçalhos
+    table.add_cell(-1, 0, width, height, text='Labels', loc='center', facecolor='lightgray')
+    table.add_cell(-1, 1, width, height, text='Acuracia', loc='center', facecolor='lightgray')
+
+    ax.add_table(table)
+    
+    # Salvar o gráfico se um caminho de salvamento for fornecido
+    if save_path:
+        plt.savefig(save_path, bbox_inches='tight')
+
+    plt.show()
+
+def plot_all_decision_boundaries(df, weights_list=None, title='', save_path=None):
+    plt.figure(figsize=(8, 6))
+    
+    # Normalizar os dados de intensidade e simetria
+    scaler = StandardScaler()
+    X_normalized = scaler.fit_transform(df[['intensidade', 'simetria']])
+    
+    # Substituir os valores de intensidade e simetria com os valores normalizados
+    df['intensidade_norm'] = X_normalized[:, 0]
+    df['simetria_norm'] = X_normalized[:, 1]
+
+    # Plotar os dados normalizados
+    plt.scatter(df['intensidade_norm'], df['simetria_norm'], c=df['label'], cmap='viridis', edgecolors='k')
+
+    if weights_list is not None:
+        # Para cada conjunto de pesos, plotar a linha de decisão correspondente
+        x_vals = np.linspace(df['intensidade_norm'].min(), df['intensidade_norm'].max(), 100)
+        for i in range(len(weights_list)):
+            weights = weights_list[i] 
+            y_vals = -(weights[0] + weights[1] * x_vals) / weights[2]
+            plt.plot(x_vals, y_vals, label=f'Passo {i+1}', linestyle='--')
+    
+    plt.title(title)
+    plt.xlabel('Intensidade (Normalizada)')
+    plt.ylabel('Simetria (Normalizada)')
+    plt.xlim(df['intensidade_norm'].min() - 1, df['intensidade_norm'].max() + 1)
+    plt.ylim(df['simetria_norm'].min() - 1, df['simetria_norm'].max() + 1)
+
+    plt.legend()  # Adiciona uma legenda para identificar as retas de decisão
+    
+    if save_path:
+        plt.savefig(save_path)
+    plt.show()
