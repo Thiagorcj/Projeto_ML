@@ -7,7 +7,7 @@ Inicialmente, é realizado o tratamento dos arquivos encontrados na pasta data, 
 ![Gráfico](imagens/grafico_int_simetria.png)
 
 
-No arquivo [funcs.py](funcs.py)
+No arquivo [funcs.py](models.py)
  está presente os códigos de Regressão linear, PLA, Pocket e Regressão logistica. Abaixo estão os plots obtidos comparando 1 a 1 (no caso do PLA, nem sempre será possível ser utilizado, pois os dados não são linearmente separáveis). E importante destacar que foram feitas adapções como transformar as labels em 1 e -1 para conseguir calcular. Essas informações estão presentes no arquivo [codes.ipynb](codes.ipynb).
 
 ### Regressão linear
